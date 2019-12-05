@@ -22,10 +22,21 @@ class Star
     last_name
     ) VALUES (
       $1, $2
-    ) RETURNING id;"
-    values = [@first_name, @last_name]
-    stars = SqlRunner.run(sql, values).first
-    @id = stars['id'].to_i
-  end
+      ) RETURNING id;"
+      values = [@first_name, @last_name]
+      stars = SqlRunner.run(sql, values).first
+      @id = stars['id'].to_i
+    end
 
-end
+    def self.all()
+      sql = "SELECT * FROM stars"
+      stars = SqlRunner.run(sql)
+      return map_stars(stars)
+    end
+
+    def self.map_stars(star_data)
+      result = star_data.map { |star| Star.new(star)}
+      return result
+    end
+
+  end
